@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Connect your account</title></head>
+<body>
+  <button id="connect">Connect my account</button>
+
+  <script>
+    document.getElementById('connect').onclick = () => {
+      const uid = prompt("Internal user ID (or email)");       // however you identify users
+      location.href = `https://hook.us1.make.com/puhr1531og4uavlcuk8fnbrbx5dtofaw?uid=${encodeURIComponent(uid)}`;
+    };
+  </script>
+</body>
+</html>
