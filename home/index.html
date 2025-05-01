@@ -5,131 +5,70 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Connect your account • Willbot.ai</title>
 
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
   <style>
-    :root{
-      --brand: #30ff96;         /* lime-green accent (≈ willbot.ai) */
-      --bg:     #0d0d0d;
-      --card:   rgba(255,255,255,0.05);
-      --radius: 14px;
-    }
+    :root{--brand:#30ff96;--bg:#0d0d0d;--card:rgba(255,255,255,.05);--radius:14px}
     *{box-sizing:border-box;margin:0;padding:0}
     body{
-      font-family:"Poppins",sans-serif;
-      background:var(--bg);
-      color:#fff;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      padding:4rem 1rem;
-      min-height:100vh;
+      font-family:Poppins,sans-serif;background:var(--bg);color:#fff;
+      display:flex;flex-direction:column;align-items:center;padding:4rem 1rem;min-height:100vh
     }
-    img#logo{
-      width:180px;
-      margin-bottom:3rem;     /* shadow removed per your tweak */
-    }
+    img{width:180px;margin-bottom:3rem}
     .card{
-      width:100%;
-      max-width:480px;
-      background:var(--card);
-      backdrop-filter:blur(8px);
-      border-radius:var(--radius);
-      padding:2rem;
-      text-align:center;
-      box-shadow:0 4px 40px rgba(0,0,0,.4);
+      width:100%;max-width:480px;background:var(--card);backdrop-filter:blur(8px);
+      border-radius:var(--radius);padding:2rem;text-align:center;
+      box-shadow:0 4px 40px rgba(0,0,0,.4)
     }
     h1{font-size:1.6rem;font-weight:600;margin-bottom:1.25rem}
-    input[type="email"]{
-      width:100%;
-      padding:0.85rem 1rem;
-      border-radius:var(--radius);
-      border:1px solid rgba(255,255,255,.15);
-      background:rgba(255,255,255,.04);
-      color:#fff;
-      font-size:1rem;
-      margin-bottom:1rem;
-    }
-    input[type="email"]::placeholder{color:#888}
     button{
-      cursor:pointer;
-      appearance:none;
-      border:none;
-      border-radius:var(--radius);
-      padding:0.9rem 1.6rem;
-      font-size:1rem;
-      font-weight:600;
-      color:#0d0d0d;
-      background:var(--brand);
-      transition:transform .15s ease, box-shadow .15s ease;
+      cursor:pointer;appearance:none;border:none;border-radius:var(--radius);
+      padding:.9rem 1.6rem;font-size:1rem;font-weight:600;color:#0d0d0d;background:var(--brand);
+      transition:transform .15s,box-shadow .15s
     }
-    button:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 6px 20px rgba(48,255,150,.3)}
-    button:disabled{opacity:.5;cursor:not-allowed}
+    button:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(48,255,150,.3)}
     iframe{
-      width:100%;
-      height:620px;            /* Unipile wizard default; adjust if needed */
-      border:0;
-      border-radius:var(--radius);
+      width:100%;height:620px;border:0;border-radius:var(--radius)
     }
-    .loading{opacity:.6;pointer-events:none}
     .msg{margin-top:1.25rem;font-size:.9rem;color:#aaa}
   </style>
 </head>
 <body>
 
-  <!-- Logo -->
-  <img id="logo" src="https://static.wixstatic.com/media/f63745_d8e0946dd69d41b2a45980229cc1d5f2~mv2.png/v1/crop/x_7,y_20,w_397,h_135/fill/w_194,h_68,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Screenshot%202023-08-12%20at%201_45_33%20PM.png"
-       alt="Willbot.ai logo">
+  <img src="https://static.wixstatic.com/media/f63745_d8e0946dd69d41b2a45980229cc1d5f2~mv2.png/v1/crop/x_7,y_20,w_397,h_135/fill/w_194,h_68,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Screenshot%202023-08-12%20at%201_45_33%20PM.png" alt="Willbot.ai">
 
-  <!-- Card -->
   <div class="card" id="card">
     <h1>Connect your account</h1>
 
-    <input type="email" id="email" placeholder="you@example.com" autocomplete="email" required>
-    <button id="connect" disabled>Connect</button>
+    <button id="connect">Get&nbsp;Started</button>
 
-    <p class="msg" id="msg">
-      You’ll be asked to log in to LinkedIn and grant access.<br>
-      The process takes about 60 seconds.
-    </p>
-
-    <!-- iframe will be injected here -->
+    <p class="msg">You’ll be asked to log in to LinkedIn and grant access.<br>
+      The process takes about&nbsp;60&nbsp;seconds.</p>
   </div>
 
   <script>
-    const emailInput = document.getElementById('email');
     const connectBtn = document.getElementById('connect');
     const card       = document.getElementById('card');
 
-    // enable button once a value is typed
-    emailInput.addEventListener('input', () => {
-      connectBtn.disabled = !emailInput.value.trim();
-    });
-
     async function startFlow(){
-      const uid = emailInput.value.trim();
-      if(!uid) return;
-
-      connectBtn.classList.add('loading');
       connectBtn.textContent='Generating link…';
+      connectBtn.style.pointerEvents='none'; connectBtn.style.opacity='.6';
 
       try{
-        // 🔗  Replace with your Make webhook URL
+        // 🔗 Replace with YOUR Make webhook base
+        const uid  = `anon-${Date.now()}`;                // auto-generated ID
         const hook = `https://hook.us1.make.com/puhr1531og4uavlcuk8fnbrbx5dtofaw?uid=${encodeURIComponent(uid)}`;
 
         const res  = await fetch(hook);
         if(!res.ok) throw new Error('Webhook error');
         const authUrl = (await res.text()).trim();
 
-        // Swap form for iframe
         card.innerHTML = `<iframe src="${authUrl}" allow="clipboard-write camera microphone"></iframe>`;
       }catch(err){
-        alert('Sorry, something went wrong. Please try again or contact support.');
-        connectBtn.classList.remove('loading');
-        connectBtn.textContent='Connect';
+        alert('Sorry, something went wrong. Please try again.');
+        connectBtn.textContent='Get Started'; connectBtn.style.pointerEvents=''; connectBtn.style.opacity='';
       }
     }
 
